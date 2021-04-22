@@ -1,0 +1,42 @@
+<html>
+<head>
+ <title>Rest API Example</title>
+ <meta charset="utf-8">
+ <link href="../base1/cockpit.css" type="text/css" rel="stylesheet">
+ <script src="../base1/cockpit.js"></script>
+</head>
+<body>
+ <div class="container-fluid">
+ <h2>Rest Server Info</h2>
+        <ul>
+                <li>User Id: <span id="userid">?</span></li>
+                <li>id: <span id="id">?</span></li>
+                <li>Title: <span id="title">?</span></li>
+                <li>Body: <span id="body">?</span></li>
+                <li><input class="form-control" id="newZone"></li>
+                <td><button class="pf-c-button pf-m-primary" id="change">Change</button></td>
+        </ul>
+ </div>
+                <script>
+                        var client = cockpit.http(80 , { address : "jsonplaceholder.typicode.com" });
+                        var newZone = document.getElementById("newZone");
+                        document.getElementById("change").addEventListener("click", retrieve_info);
+
+                        function retrieve_info() {
+                                var info = client.get("/posts/"+newZone.value);
+                                info.done(process_info);
+                                info.fail(print_failure);
+                        }
+
+                        function process_info(data) {
+                                var resp = JSON.parse(data);
+                                document.getElementById("userid").innerText=resp.userId;
+                                document.getElementById("id").innerText=resp.id;
+                                document.getElementById("title").innerText=resp.title;
+                                document.getElementById("body").innerText=resp.body;
+                        }
+
+                        function print_failure(error) { console.log(error); }
+                </script>
+        </body>
+</html>
